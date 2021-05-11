@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { Redirect } from 'react-router'
+import { Redirect, useHistory } from 'react-router'
 import { AUTHENTICATION_PATH } from "../config/paths";
 import { getUserByID } from "../api/users";
 import { decodeToken } from "../helpers/jwt";
@@ -15,6 +15,7 @@ const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [currentCompany, setCurrentCompany] = useState(null)
   const [shouldCheckForUser, setShouldCheckForUser] = useState(false);
+  const history = useHistory()
 
   useEffect(() => {
     checkForUser();
@@ -102,7 +103,11 @@ const AuthContextProvider = ({ children }) => {
 
     }
   };
-  const logout = async () => {};
+  const logout = () => {
+    localStorage.removeItem("user")
+    history.push("/login")
+
+  };
 
   const getCurrentUser = async() => {
     const token = localStorage.getItem("user")

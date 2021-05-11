@@ -11,9 +11,32 @@ const updateCompany = async(id, attrs) => {
         body: JSON.stringify(attrs)
     })
 
-    console.log(response)
 
 }
 
+const createCompany = async (attrs) => {
+    const response = await authenticatedRequest(`${AUTHENTICATION_PATH}/companies`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(attrs)
+    })
 
-export { updateCompany }
+    return response
+}
+
+const getCompanyByID = async (id) => {
+    if (!id) return
+    try {
+        const response = await authenticatedRequest(`${AUTHENTICATION_PATH}/companies/${id}`)
+        if (!response.ok) return
+        const company  = await response.json()
+        return company
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+export { updateCompany, createCompany, getCompanyByID }

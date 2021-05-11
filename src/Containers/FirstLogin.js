@@ -4,14 +4,15 @@ import { useAuth } from '../Contexts/AuthContext'
 import { updateCompany } from '../api/companies'
 import { uploadImages } from '../api/files'
 
+
 const FirstLogin = () => {
-    const { currentCompany, getCurrentUser} = useAuth()
+    const { user, currentCompany, getCurrentUser} = useAuth()
     const [image, setImage] = useState(null)
 
     const handleImageChange = async (e) => {
         const file = e.target.files[0] 
         if(!file) return
-        const response = await uploadImages(`companies/${currentCompany.ID}/logo`, file)
+        const response = await uploadImages(`users/${user.ID}/companies/logos/${new Date()}`, file)
         if (response.ok) {
             const { url } = await response.json() 
             await updateCompany(currentCompany.ID, {...currentCompany, logo: url})
